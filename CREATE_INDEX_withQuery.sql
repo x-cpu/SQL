@@ -1,0 +1,1 @@
+CREATE INDEX ftpstimepbatchnumpages on document (ftpstime, pbatch, numpages)

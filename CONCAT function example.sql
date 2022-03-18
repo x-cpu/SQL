@@ -1,0 +1,1 @@
+select {fn concat ('00', docid)} as DocID, DocType from docid
