@@ -1,0 +1,67 @@
+--FOP
+select distinct c.dcsID, UPPER(c.Lastname) LastName, c.Recvdate, 
+CASE
+	when c.pbatch like '04%' then 'Fax'
+	when c.pbatch like '17%' then 'NCC'
+	when c.pbatch like '02%' then UPPER(b.BoxNO)
+	when c.Pbatch like '03%' then UPPER(cb.BoxNO)
+	when c.Pbatch like '11%' then 'PMR/DOMA'
+END BoxNo, 
+CASE
+	when c.pbatch like '02%' then UPPER(b.BoxType)
+	when c.Pbatch like '03%' then UPPER(cb.BoxType)
+END BoxType
+--, 
+--CASE
+--	when c.pbatch like '02%' then UPPER(x.shipmentno)
+--	when c.Pbatch like '03%' then UPPER(z.shipmentno)
+--END ShipmentNo 
+from customerdata c
+left join Boxmapping b
+on c.dcsID = b.dcsID
+left join CMPBoxmapping cb
+on c.dcsID = cb.dcsID
+--left join Boxmapping x
+--on b.BoxNO = x.BoxNO
+--left join CMPBoxmapping z
+--on b.BoxNO = z.BoxNO
+where c.filenumber in 
+('25453806',
+'209423756',
+'17519842',
+'616123306')
+order by Lastname
+
+
+
+
+--MTV
+select distinct c.dcsID, UPPER(c.Lastname) LastName, c.Recvdate, 
+CASE
+	--when c.pbatch like '04%' then 'Fax'
+	--when c.pbatch like '17%' then 'NCC'
+	when c.pbatch like '02%' then UPPER(b.BoxNO)
+	when c.pbatch like '01%' then UPPER(b.BoxNO)
+	--when c.Pbatch like '03%' then UPPER(cb.BoxNO)
+	--when c.Pbatch like '11%' then 'PMR/DOMA'
+END BoxNo, b.BoxType
+--, 
+--CASE
+--	when c.pbatch like '02%' then UPPER(x.shipmentno)
+--	when c.Pbatch like '03%' then UPPER(z.shipmentno)
+--END ShipmentNo 
+from customerdata c
+left join Boxmapping b
+on c.dcsID = b.dcsID
+--left join CMPBoxmapping cb
+--on c.dcsID = cb.dcsID
+--left join Boxmapping x
+--on b.BoxNO = x.BoxNO
+--left join CMPBoxmapping z
+--on b.BoxNO = z.BoxNO
+where c.filenumber in 
+('25453806',
+'209423756',
+'17519842',
+'616123306')
+order by Lastname

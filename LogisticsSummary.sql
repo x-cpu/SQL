@@ -1,0 +1,1 @@
+exec dbo.VA_LogisticsSummary @fromdate = '2012-11-01 00:00:00', @todate = '2012-11-27 00:00:00'
