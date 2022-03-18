@@ -1,0 +1,38 @@
+select distinct T.DCSID,
+CASE
+	WHEN T.#ofBatchesCheckedIn1 = 0 THEN 'Not Checked In (no manifestDCS record)'
+	WHEN T.#ofBatchesCheckedIn = 0 THEN 'Not Checked In (no pbatchDCSMapping record)'
+	WHEN T.#ofBatchesCheckedIn > 0 and
+	(T.#ofBatchesCheckedIn = T.#ofBatchesUploaded) and
+	(T.#ofDocs = T.#ofDocsFTP) and
+	T.UploadDateTime is not null THEN 'All docs for DCSID show uploaded on our side.'
+	WHEN T.#ofBatchesCheckedIn > 0 and
+	(T.#ofBatchesCheckedIn = T.#ofBatchesUploaded) and
+	(T.#ofDocs <> T.#ofDocsFTP) and
+	T.UploadDateTime is not null THEN 'Not Completed -'
+	WHEN T.#ofBatchesCheckedIn > 0 and
+	(CAST(T.#ofBatchesCheckedIn as int) > CAST(T.#ofBatchesInventory as int)) and
+	T.UploadDateTime is not null  THEN 'Not Completed - Missing batch from inventory table (physicalbatch)'
+	ELSE 'Not Completed'
+	END Status
+	--into xMissingDCSID20210811results
+FROM
+(select distinct x.dcsid DCSID, 
+count(distinct m.pbatch) #ofBatchesCheckedIn1,
+count(distinct pb.pbatch) #ofBatchesInventory,
+count(distinct p.pbatch) #ofBatchesCheckedIn,
+count(distinct d.pbatch) #ofBatchesUploaded,
+count(distinct d.imageid) #ofDocs,
+count(distinct (CONCAT(d.ftpstime,d.SysKey))) #ofDocsFTP,
+CONVERT(nvarchar, max(d.ftpstime), 101) UploadDateTime
+from xmissingdcsidpart2 x
+left join document d
+on x.dcsID = d.dcsID
+left join PbatchDCSMapping p
+on x.dcsID = p.dcsid
+left join manifestDCS m
+on x.dcsID = m.dcsID
+left join PhysicalBatch pb
+on p.RMN = pb.RMN
+group by x.dcsid) T
+order by Status
