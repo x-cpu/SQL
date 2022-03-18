@@ -1,0 +1,1 @@
+EXEC [dbo].[VA_UploadTAT_Report]

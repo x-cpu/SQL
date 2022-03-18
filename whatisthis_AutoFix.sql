@@ -1,0 +1,1 @@
+sp_change_users_login 'Auto_Fix', 'lrmo', NULL, 'Happy_Trails'
