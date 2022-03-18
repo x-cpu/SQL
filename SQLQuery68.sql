@@ -1,0 +1,1 @@
+select * from manifestDCS order by insertdate desc

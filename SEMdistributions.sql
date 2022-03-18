@@ -1,0 +1,36 @@
+SELECT 
+ISNULL(SUM(CASE WHEN PDFTrigger = 'sem.1' THEN 1 ELSE 0 END), 0) AS SEM1, 
+ISNULL(SUM(CASE WHEN PDFTrigger = 'sem.2' THEN 1 ELSE 0 END), 0)  AS SEM2, 
+ISNULL(SUM(CASE WHEN PDFTrigger = 'sem.3' THEN 1 ELSE 0 END), 0)  AS SEM3, 
+ISNULL(SUM(CASE WHEN PDFTrigger = 'sem.4' THEN 1 ELSE 0 END), 0)  AS SEM4 
+FROM Document 
+WHERE ftpstime IS NULL AND CONVERT(DATE, ImageDateTime, 101) = CONVERT(DATE, GETDATE(), 101)
+AND PBatch NOT IN (SELECT PBatch FROM Document 
+WHERE ftpstime IS NULL AND Comments IS NOT NULL)
+
+
+
+SELECT 
+(SUM(CASE WHEN PDFTrigger = '.sem1' THEN 1 ELSE 0 END)) AS SEM1, 
+(SUM(CASE WHEN PDFTrigger = '.sem2' THEN 1 ELSE 0 END)) AS SEM2, 
+(SUM(CASE WHEN PDFTrigger = '.sem3' THEN 1 ELSE 0 END)) AS SEM3, 
+(SUM(CASE WHEN PDFTrigger = '.sem4' THEN 1 ELSE 0 END)) AS SEM4 
+FROM dbo.Document 
+WHERE ftpstime IS NULL 
+AND ImageDateTime > DATEADD(DAY, -1, GETDATE())
+--AND PBatch NOT IN (SELECT PBatch FROM Document 
+--WHERE ftpstime IS NULL AND Comments IS NOT NULL
+
+
+SELECT 
+(SUM(CASE WHEN PDFTrigger = '.sem1' THEN 1 ELSE 0 END)) AS SEM1, 
+(SUM(CASE WHEN PDFTrigger = '.sem2' THEN 1 ELSE 0 END)) AS SEM2, 
+(SUM(CASE WHEN PDFTrigger = '.sem3' THEN 1 ELSE 0 END)) AS SEM3, 
+(SUM(CASE WHEN PDFTrigger = '.sem4' THEN 1 ELSE 0 END)) AS SEM4 
+FROM dbo.Document 
+WHERE 
+--ftpstime IS NULL 
+--AND 
+ImageDateTime > DATEADD(DAY, -1, GETDATE())
+--AND PBatch NOT IN (SELECT PBatch FROM Document 
+--WHERE ftpstime IS NULL AND Comments IS NOT NULL)
